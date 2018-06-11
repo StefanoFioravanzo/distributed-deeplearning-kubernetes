@@ -1,0 +1,28 @@
+version: '3.2'
+services:
+    scheduler:
+        build: .
+        image: stefanofioravanzo/mxnet-linear-dist:cpu
+        container_name: scheduler
+        env_file: .scheduler_env
+        networks:
+            - mxnetwork
+    server:
+        build: .
+        image: stefanofioravanzo/mxnet-linear-dist:cpu
+        container_name: server
+        env_file: .server_env
+        depends_on:
+            - scheduler
+        networks:
+            - mxnetwork
+    worker:
+        build: .
+        image: stefanofioravanzo/mxnet-linear-dist:cpu
+        env_file: .worker_env
+        depends_on:
+            - server
+        networks:
+            - mxnetwork
+networks:
+    mxnetwork:

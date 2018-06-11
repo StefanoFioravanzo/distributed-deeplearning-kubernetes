@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: [myPersistentVolumeClaimName]
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: [myPersistentVolumeClaimCapacity]
+  storageClassName: [myStorageClassName]

@@ -1,0 +1,62 @@
+version: '3.2'
+services:
+    ps:
+        build: .
+        image: stefanofioravanzo/tf-mnist-distributed:cpu
+        container_name: ps
+        # env_file: .ps.env
+        environment:
+            TF_CONFIG:
+                '{"cluster":{
+                   "ps":[
+                      "ps:2222"
+                   ],
+                   "worker":[
+                      "worker0:2222",
+                      "worker1:2222"
+                   ]
+                },
+                "task":{
+                   "type":"ps",
+                   "index":0
+                }}'
+    worker0:
+        build: .
+        image: stefanofioravanzo/tf-mnist-distributed:cpu
+        container_name: worker0
+        # env_file: .master.env
+        environment:
+            TF_CONFIG:
+                '{"cluster":{
+                   "ps":[
+                      "ps:2222"
+                   ],
+                   "worker":[
+                      "worker0:2222",
+                      "worker1:2222"
+                   ]
+                },
+                "task":{
+                   "type":"worker",
+                   "index":0
+                }}'
+    worker1:
+        build: .
+        image: stefanofioravanzo/tf-mnist-distributed:cpu
+        # env_file: .worker.env
+        container_name: worker1
+        environment:
+            TF_CONFIG:
+                '{"cluster":{
+                   "ps":[
+                      "ps:2222"
+                   ],
+                   "worker":[
+                      "worker0:2222",
+                      "worker1:2222"
+                   ]
+                },
+                "task":{
+                   "type":"worker",
+                   "index":1
+                }}'
