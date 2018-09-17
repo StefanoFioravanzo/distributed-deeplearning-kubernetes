@@ -6,7 +6,10 @@ source ./config.sh
 # Login into azure cli
 az login
 
-count=`az aks list --output tsv | grep ${CLUSTER_NAME} | wc -l | awk '{$1=$1};1'`  # awk to remove whitespaces
+count=`az aks list --output tsv | \
+    grep ${CLUSTER_NAME} | \
+    wc -l | \
+    awk '{$1=$1};1'`  # awk to remove whitespaces
 if [ $count = 1 ]
 then
     echo "Creating cluster ${CLUSTER_NAME} with ${VM_NUMBER} nodes of size ${VM_SIZE}. Running..."

@@ -6,7 +6,7 @@ FROM ubuntu:16.04
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y python3-pip && \
-    # apt-get install -y vim iputils-ping
+    apt-get install -y vim iputils-ping
 
 # Install mxnet with distributed mode enabled
 RUN pip3 install mxnet==1.1.0
