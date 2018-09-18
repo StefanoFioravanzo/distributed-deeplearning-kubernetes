@@ -1,0 +1,53 @@
+apiVersion: fioravanzo.org/v1alpha1
+kind: MXJob
+metadata:
+  name: mx-cifar-gpu
+spec:
+  replicaSpecs:
+    - replicas: 1 # 1 Scheduler
+      mxReplicaType: SCHEDULER
+      template:
+        spec:
+          containers:
+            - image: stefanofioravanzo/mxnet-cifar10-dist:gpu
+              name: mxnet
+              imagePullPolicy: Always
+              volumeMounts: &volmount
+          restartPolicy: OnFailure
+          volumes: *cifarvol
+    - replicas: 1 # 1 Server
+      mxReplicaType: SERVER
+      template:
+        spec:
+          containers:
+            - image: stefanofioravanzo/mxnet-cifar10-dist:gpu
+              name: mxnet
+              imagePullPolicy: Always
+              volumeMounts: &volmount
+          restartPolicy: OnFailure
+          volumes: *cifarvol
+    - replicas: 1  # 1 Worker
+      mxReplicaType: WORKER
+      template:
+        spec:
+          containers:
+            - image: stefanofioravanzo/mxnet-cifar10-dist:gpu
+              name: mxnet
+              imagePullPolicy: Always
+              # Add GPU resource
+              resources:
+                limits:
+                  alpha.kubernetes.io/nvidia-gpu: 1
+              volumeMounts: &volmount
+                - mountPath: /
+#                  subPath: mx-cifar-gpu
+                  name: myshare
+          restartPolicy: OnFailure
+          volumes: &cifarvol
+           - name: myshare
+#             persistentVolumeClaim:
+#               claimName: azurefile
+             azureFile:
+               secretName: mxsecret
+               shareName: mxsn
+               readOnly: false

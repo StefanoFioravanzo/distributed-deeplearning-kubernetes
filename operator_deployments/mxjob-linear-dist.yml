@@ -1,0 +1,33 @@
+apiVersion: fioravanzo.org/v1alpha1
+kind: MXJob
+metadata:
+  name: mx-test-dist
+spec:
+  replicaSpecs:
+    - replicas: 1 # 1 Master
+      mxReplicaType: SCHEDULER
+      template:
+        spec:
+          containers:
+            - image: stefanofioravanzo/mxnet-linear-dist:cpu
+              name: mxnet
+              imagePullPolicy: Always
+          restartPolicy: OnFailure
+    - replicas: 1 # 1 Workers
+      mxReplicaType: SERVER
+      template:
+        spec:
+          containers:
+            - image: stefanofioravanzo/mxnet-linear-dist:cpu
+              name: mxnet
+              imagePullPolicy: Always
+          restartPolicy: OnFailure
+    - replicas: 1  # 1 Parameter server
+      mxReplicaType: WORKER
+      template:
+        spec:
+          containers:
+            - image: stefanofioravanzo/mxnet-linear-dist:cpu
+              name: mxnet
+              imagePullPolicy: Always
+          restartPolicy: OnFailure

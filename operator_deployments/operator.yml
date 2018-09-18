@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mx-job-operator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mx-job-operator
+    spec:
+      containers:
+      - name: mx-job-operator
+        image: stefanofioravanzo/mx-operator
+        command:
+          - /opt/operator/mx-operator
+          - -alsologtostderr

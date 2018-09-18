@@ -1,0 +1,11 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: mxjobs.fioravanzo.org
+spec:
+  group: fioravanzo.org
+  version: v1alpha1
+  names:
+    kind: MXJob
+    singular: mxjob
+    plural: mxjobs
